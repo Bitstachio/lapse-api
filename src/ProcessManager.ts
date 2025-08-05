@@ -22,8 +22,6 @@ class ProcessManager {
       component: process.component,
       quantity: process.quantity,
       state: "running",
-      isRunning: true,
-      pendingAction: false,
       createdAt: now,
       interval: {
         startTime: now,
@@ -43,21 +41,21 @@ class ProcessManager {
   public pause() {
     if (this.process) {
       this.process.interval.prevSessionsDuration += Date.now() - this.process.interval.startTime.getTime();
-      this.process.isRunning = false;
+      this.process.state = "paused";
     }
   }
 
   public resume() {
     if (this.process) {
       this.process.interval.startTime = new Date();
-      this.process.isRunning = true;
+      this.process.state = "running";
     }
   }
 
   public timeout() {
     if (this.process && this.process.interval) {
       this.process.interval.targetDuration = TIMEOUT_TARGET_DURATION;
-      this.process.pendingAction = true;
+      this.process.state = "timeout";
 
       this.process.interval.prevSessionsDuration = 0;
       this.process.interval.startTime = new Date();
@@ -67,7 +65,6 @@ class ProcessManager {
   public overtime() {
     if (this.process) {
       this.process.interval.targetDuration = OVERTIME_TARGET_DURATION;
-      this.process.pendingAction = false;
 
       this.process.interval.prevSessionsDuration = 0;
       this.process.interval.startTime = new Date();

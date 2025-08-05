@@ -1,9 +1,22 @@
 import { InvalidProcessActionError } from "../errors/process/invalid-action-error";
 import { NoProcessError } from "../errors/process/no-process-error";
 import ProcessManager from "../ProcessManager";
-import { IProcessCreateDto } from "../types/process";
+import { IProcessCreateDto, TProcessState } from "../types/process";
 
 const manager = () => ProcessManager.getInstance();
+
+const calculateElapsedDuration = (state: TProcessState, startTime: Date, prevSessionsDuration: number) => {
+  const now = Date.now();
+  switch (state) {
+    case "paused":
+      return prevSessionsDuration;
+    case "running":
+      return now - startTime.getTime() + prevSessionsDuration;
+    // TODO: Throw error in case of unhandled state
+    default: // state === "timeout"
+      return now - startTime.getTime();
+  }
+};
 
 export const processService = {
   getStatus: () => {
@@ -14,11 +27,8 @@ export const processService = {
       interval: {
         ...process.interval,
         remainingDuration:
-          process.interval.targetDuration -
-          (process.isRunning
-            ? Date.now() - process.interval.startTime.getTime()
-            : process.interval.prevSessionsDuration),
-      },
+          process.interval.targetDuration - calculateElapsedDuration(process.state, process.interval.startTime, process.interval.prevSessionsDuration),
+      }
     };
   },
 
@@ -64,5 +74,5 @@ export const processService = {
     if (process.state !== "timeout") throw new InvalidProcessActionError(process.state, "extend");
 
     manager().overtime();
-  },
+  }
 };

@@ -13,9 +13,6 @@ export interface IInterval {
 export interface IProcess {
   component: string;
   quantity: number;
-  // TODO: Remove isRunning & pendingAction (replace with state)
-  isRunning: boolean;
-  pendingAction: boolean;
   state: TProcessState;
   createdAt: Date;
   interval: IInterval;
