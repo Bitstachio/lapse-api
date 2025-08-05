@@ -1,0 +1,4 @@
+export const TIMEOUT_CHECK_INTERVAL = 3_000;
+export const TARGET_DURATION = 10_000;
+export const TIMEOUT_TARGET_DURATION = 10_000;
+export const OVERTIME_TARGET_DURATION = 5_000;
