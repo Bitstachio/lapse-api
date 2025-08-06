@@ -13,13 +13,15 @@ export const checkTimeout = () => {
     if ((process.state === "running" || process.state === "timeout") && duration > process.interval.targetDuration) {
       console.log("Process has timed out");
 
+      const timestamp = new Date();
       if (process.state === "timeout") {
-        getIO().emit("process-timeout", { status: "updated" });
-        console.log("EXPIRE");
+        console.log("* Extension Timeout");
         processManager.reset();
+        getIO().emit("process-timeout", { type: "EXTENSION_TIMEOUT", timestamp });
       } else {
-        console.log("DISPLAY POPUP");
+        console.log("* Process Timeout");
         processService.timeout();
+        getIO().emit("process-timeout", { type: "PROCESS_TIMEOUT", timestamp });
       }
     }
   }
