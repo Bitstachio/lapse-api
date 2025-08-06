@@ -73,7 +73,7 @@ export const processService = {
     if (!process) throw new NoProcessError();
     if (process.state !== "timeout") throw new InvalidProcessActionError(process.state, "extend");
 
-    manager().overtime();
+    manager().extend();
   },
 
   finish: () => {

@@ -40,32 +40,31 @@ class ProcessManager {
   // TODO: Determine whether I should have all these null checks?
   public pause() {
     if (this.process) {
-      this.process.interval.prevSessionsDuration += Date.now() - this.process.interval.startTime.getTime();
       this.process.state = "paused";
+      this.process.interval.prevSessionsDuration += Date.now() - this.process.interval.startTime.getTime();
     }
   }
 
   public resume() {
     if (this.process) {
-      this.process.interval.startTime = new Date();
       this.process.state = "running";
+      this.process.interval.startTime = new Date();
     }
   }
 
   public timeout() {
     if (this.process && this.process.interval) {
-      this.process.interval.targetDuration = TIMEOUT_TARGET_DURATION;
       this.process.state = "timeout";
-
+      this.process.interval.targetDuration = TIMEOUT_TARGET_DURATION;
       this.process.interval.prevSessionsDuration = 0;
       this.process.interval.startTime = new Date();
     }
   }
 
-  public overtime() {
+  public extend() {
     if (this.process) {
+      this.process.state = "running";
       this.process.interval.targetDuration = OVERTIME_TARGET_DURATION;
-
       this.process.interval.prevSessionsDuration = 0;
       this.process.interval.startTime = new Date();
     }
