@@ -13,9 +13,7 @@ export const testProcess = (_: Request, res: Response) => {
 export const getProcess = (_: Request, res: Response<IApiResponse<IProcessStatusDto | null>>) => {
   try {
     const status = processService.getStatus();
-    res
-      .status(200)
-      .json({ success: true, ...(!status && { message: "No active process" }), data: status });
+    res.status(200).json({ success: true, ...(!status && { message: "No active process" }), data: status });
   } catch (error) {
     return internalServerError(res);
   }
@@ -38,10 +36,7 @@ export const pauseProcess = (_: Request, res: Response<IApiResponse>) => {
     processService.pause();
     return res.status(200).json({ success: true, message: "Process paused" });
   } catch (error) {
-    if (
-      error instanceof NoProcessError ||
-      error instanceof InvalidProcessActionError
-    ) {
+    if (error instanceof NoProcessError || error instanceof InvalidProcessActionError) {
       return res.status(400).json({ success: false, message: error.message, error: error.serialize() });
     }
     return internalServerError(res);
@@ -53,21 +48,30 @@ export const resumeProcess = (_: Request, res: Response<IApiResponse>) => {
     processService.resume();
     return res.status(200).json({ success: true, message: "Process resumed" });
   } catch (error) {
-    if (
-      error instanceof NoProcessError ||
-      error instanceof InvalidProcessActionError
-    ) {
+    if (error instanceof NoProcessError || error instanceof InvalidProcessActionError) {
       return res.status(400).json({ success: false, message: error.message, error: error.serialize() });
     }
     return internalServerError(res);
   }
 };
 
-export const overtimeProcess = (_: Request, res: Response<IApiResponse>) => {
+export const extendProcess = (_: Request, res: Response<IApiResponse>) => {
   try {
     processService.extend();
     return res.status(200).json({ success: true, message: "Process resumed in overtime" });
   } catch (error) {
     return internalServerError(res);
+  }
+};
+
+// TODO: Implement appropriate finish logic
+export const finishProcess = (_: Request, res: Response<IApiResponse>) => {
+  try {
+    processService.finish();
+    return res.status(200).json({ success: true, message: "Process finished" });
+  } catch (error) {
+    if (error instanceof NoProcessError || error instanceof InvalidProcessActionError) {
+      return res.status(400).json({ success: false, message: error.message, error: error.serialize() });
+    }
   }
 };
