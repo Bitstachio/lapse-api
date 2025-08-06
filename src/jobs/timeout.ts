@@ -1,5 +1,6 @@
 import ProcessManager from "../ProcessManager";
 import { processService } from "../services/processService";
+import { getIO } from "../socket";
 
 export const checkTimeout = () => {
   const processManager = ProcessManager.getInstance();
@@ -9,10 +10,11 @@ export const checkTimeout = () => {
     const duration = Date.now() - process.interval.startTime.getTime() + process.interval.prevSessionsDuration;
     console.log(`Current process duration: ${duration} ms`);
 
-    if (process.isRunning && duration > process.interval.targetDuration) {
+    if ((process.state === "running" || process.state === "timeout") && duration > process.interval.targetDuration) {
       console.log("Process has timed out");
 
-      if (process.pendingAction) {
+      if (process.state === "timeout") {
+        getIO().emit("process-timeout", { status: "updated" });
         console.log("EXPIRE");
         processManager.reset();
       } else {
