@@ -20,7 +20,7 @@ export const checkTimeout = () => {
         getIO().emit("process-timeout", { type: "EXTENSION_TIMEOUT", timestamp });
       } else {
         console.log("* Process Timeout");
-        processService.timeout();
+        processService.timeout(0); // TODO: Temporary solution
         getIO().emit("process-timeout", { type: "PROCESS_TIMEOUT", timestamp });
       }
     }
