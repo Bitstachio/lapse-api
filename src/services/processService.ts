@@ -19,7 +19,7 @@ const calculateElapsedDuration = (state: TProcessState, startTime: Date, prevSes
 };
 
 export const processService = {
-  getStatus: () => {
+  getStatus: (id: number) => {
     const process = manager().getProcess();
     if (!process) return process;
     return {
@@ -40,7 +40,7 @@ export const processService = {
     return manager().create(newProcess);
   },
 
-  pause: () => {
+  pause: (id: number) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
@@ -49,7 +49,7 @@ export const processService = {
     manager().pause();
   },
 
-  resume: () => {
+  resume: (id: number) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
@@ -58,7 +58,7 @@ export const processService = {
     manager().resume();
   },
 
-  timeout: () => {
+  timeout: (id: number) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
@@ -67,7 +67,7 @@ export const processService = {
     manager().timeout();
   },
 
-  extend: () => {
+  extend: (id: number) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
@@ -76,7 +76,7 @@ export const processService = {
     manager().extend();
   },
 
-  finish: () => {
+  finish: (id: number) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();

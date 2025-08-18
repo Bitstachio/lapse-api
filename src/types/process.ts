@@ -37,3 +37,7 @@ export interface IIntervalStatusDto extends IInterval {
 export interface IProcessStatusDto extends IProcess {
   interval: IIntervalStatusDto;
 }
+
+export interface IProcessIdentifier {
+  id: number;
+}

@@ -3,16 +3,19 @@ import { InvalidProcessActionError } from "../errors/process/invalid-action-erro
 import { NoProcessError } from "../errors/process/no-process-error";
 import { processService } from "../services/processService";
 import { IApiResponse } from "../types/api";
-import { IProcess, IProcessCreateDto, IProcessStatusDto } from "../types/process";
+import { IProcess, IProcessCreateDto, IProcessIdentifier, IProcessStatusDto } from "../types/process";
 import { internalServerError } from "../utils/api";
 
 export const testProcess = (_: Request, res: Response) => {
   res.status(200).json({ message: "Process test endpoint is working" });
 };
 
-export const getProcess = (_: Request, res: Response<IApiResponse<IProcessStatusDto | null>>) => {
+export const getProcess = (
+  req: Request<{}, {}, IProcessIdentifier>,
+  res: Response<IApiResponse<IProcessStatusDto | null>>,
+) => {
   try {
-    const status = processService.getStatus();
+    const status = processService.getStatus(req.body.id);
     res.status(200).json({ success: true, ...(!status && { message: "No active process" }), data: status });
   } catch (error) {
     return internalServerError(res);
@@ -31,9 +34,9 @@ export const createProcess = (req: Request<{}, {}, IProcessCreateDto>, res: Resp
   }
 };
 
-export const pauseProcess = (_: Request, res: Response<IApiResponse>) => {
+export const pauseProcess = (req: Request<{}, {}, IProcessIdentifier>, res: Response<IApiResponse>) => {
   try {
-    processService.pause();
+    processService.pause(req.body.id);
     return res.status(200).json({ success: true, message: "Process paused" });
   } catch (error) {
     if (error instanceof NoProcessError || error instanceof InvalidProcessActionError) {
@@ -43,9 +46,9 @@ export const pauseProcess = (_: Request, res: Response<IApiResponse>) => {
   }
 };
 
-export const resumeProcess = (_: Request, res: Response<IApiResponse>) => {
+export const resumeProcess = (req: Request<{}, {}, IProcessIdentifier>, res: Response<IApiResponse>) => {
   try {
-    processService.resume();
+    processService.resume(req.body.id);
     return res.status(200).json({ success: true, message: "Process resumed" });
   } catch (error) {
     if (error instanceof NoProcessError || error instanceof InvalidProcessActionError) {
@@ -55,9 +58,9 @@ export const resumeProcess = (_: Request, res: Response<IApiResponse>) => {
   }
 };
 
-export const extendProcess = (_: Request, res: Response<IApiResponse>) => {
+export const extendProcess = (req: Request<{}, {}, IProcessIdentifier>, res: Response<IApiResponse>) => {
   try {
-    processService.extend();
+    processService.extend(req.body.id);
     return res.status(200).json({ success: true, message: "Process resumed in overtime" });
   } catch (error) {
     return internalServerError(res);
@@ -65,9 +68,9 @@ export const extendProcess = (_: Request, res: Response<IApiResponse>) => {
 };
 
 // TODO: Implement appropriate finish logic
-export const finishProcess = (_: Request, res: Response<IApiResponse>) => {
+export const finishProcess = (req: Request<{}, {}, IProcessIdentifier>, res: Response<IApiResponse>) => {
   try {
-    processService.finish();
+    processService.finish(req.body.id);
     return res.status(200).json({ success: true, message: "Process finished" });
   } catch (error) {
     if (error instanceof NoProcessError || error instanceof InvalidProcessActionError) {
