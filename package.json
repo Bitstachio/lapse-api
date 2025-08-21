@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.{ts,js,json,md}\""
   },
   "keywords": [],
-  "author": "",
+  "author": "Barbod Habibi",
   "license": "ISC",
   "description": "",
   "dependencies": {
