@@ -12,11 +12,11 @@ import {
 const router = Router();
 
 router.get("/test", testProcess);
-router.get("/status", getProcess);
-router.post("/start", createProcess);
-router.patch("/pause", pauseProcess);
-router.patch("/resume", resumeProcess);
-router.patch("/extend", extendProcess);
-router.patch("/finish", finishProcess)
+router.get("/status/:clientId", getProcess);
+router.post("/start/:clientId", createProcess);
+router.patch("/pause/:clientId", pauseProcess);
+router.patch("/resume/:clientId", resumeProcess);
+router.patch("/extend/:clientId", extendProcess);
+router.patch("/finish/:clientId", finishProcess)
 
 export default router;

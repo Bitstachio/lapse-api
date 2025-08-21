@@ -19,7 +19,7 @@ const calculateElapsedDuration = (state: TProcessState, startTime: Date, prevSes
 };
 
 export const processService = {
-  getStatus: (id: number) => {
+  getStatus: (clientId: string) => {
     const process = manager().getProcess();
     if (!process) return process;
     return {
@@ -32,7 +32,7 @@ export const processService = {
     };
   },
 
-  create: (newProcess: IProcessCreateDto) => {
+  create: (clientId: string, newProcess: IProcessCreateDto) => {
     const process = manager().getProcess();
 
     if (process) throw new InvalidProcessActionError(process.state, "start", "Process already exists");
@@ -40,7 +40,7 @@ export const processService = {
     return manager().create(newProcess);
   },
 
-  pause: (id: number) => {
+  pause: (clientId: string) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
@@ -49,7 +49,7 @@ export const processService = {
     manager().pause();
   },
 
-  resume: (id: number) => {
+  resume: (clientId: string) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
@@ -58,7 +58,7 @@ export const processService = {
     manager().resume();
   },
 
-  timeout: (id: number) => {
+  timeout: (clientId: string) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
@@ -67,7 +67,7 @@ export const processService = {
     manager().timeout();
   },
 
-  extend: (id: number) => {
+  extend: (clientId: string) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
@@ -76,7 +76,7 @@ export const processService = {
     manager().extend();
   },
 
-  finish: (id: number) => {
+  finish: (clientId: string) => {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
