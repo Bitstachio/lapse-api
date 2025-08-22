@@ -52,6 +52,7 @@ pnpm-lock.yaml
 # TypeScript build (if using TS)
 *.tsbuildinfo
 
-# Redis, MongoDB, or SQLite local files (optional)
+# Redis, MongoDB, or SQLite local files
 dump.rdb
 *.sqlite
+*.db

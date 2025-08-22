@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 
-const dbFile = path.join(__dirname, "mydb.sqlite");
+const dbFile = path.join(__dirname, "lapse.db");
 const migrationsDir = path.join(__dirname, "migrations");
 
 // open or create DB file

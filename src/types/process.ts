@@ -1,3 +1,5 @@
+// Consider incorporating Pick<> and convert everything to types
+
 // ===== Models =====
 
 export type TProcessState = "running" | "paused" | "timeout";
@@ -28,6 +30,10 @@ export interface IInvalidProcessActionDetails {
 export interface IProcessCreateDto {
   component: string;
   quantity: number;
+}
+
+export interface IIntervalCreateDto {
+  targetDuration: number;
 }
 
 export interface IIntervalStatusDto extends IInterval {
