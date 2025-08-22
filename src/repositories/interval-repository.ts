@@ -1,5 +1,5 @@
 import { Database } from "better-sqlite3";
-import { IIntervalCreateDto } from "../types/process";
+import { IIntervalCreateDto } from "../types/interval";
 
 export class IntervalRepository {
   private db: Database;
