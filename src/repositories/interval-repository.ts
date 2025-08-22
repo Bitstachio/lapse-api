@@ -9,8 +9,10 @@ export class IntervalRepository {
   }
 
   create(interval: IIntervalCreateDto) {
-    const stmt = this.db.prepare("INSERT INTO  (startTime, targetDuration, prevSessionsDuration) VALUES (?, ?, ?)");
-    const result = stmt.run(new Date().toISOString, interval.targetDuration, 0);
+    const stmt = this.db.prepare(
+      "INSERT INTO intervals (startTime, targetDuration, prevSessionsDuration) VALUES (?, ?, ?)",
+    );
+    const result = stmt.run(new Date().toISOString(), interval.targetDuration, 0);
     return {
       id: Number(result.lastInsertRowid),
       targetDuration: interval.targetDuration,
