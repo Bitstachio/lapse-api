@@ -2,11 +2,7 @@ import { Database } from "better-sqlite3";
 import { IIntervalCreateDto } from "../types/interval";
 
 export class IntervalRepository {
-  private db: Database;
-
-  constructor(db: Database) {
-    this.db = db;
-  }
+  constructor(private db: Database) {}
 
   create(interval: IIntervalCreateDto) {
     const stmt = this.db.prepare(
