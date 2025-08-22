@@ -27,8 +27,9 @@ export const processService = {
       interval: {
         ...process.interval,
         remainingDuration:
-          process.interval.targetDuration - calculateElapsedDuration(process.state, process.interval.startTime, process.interval.prevSessionsDuration),
-      }
+          process.interval.targetDuration -
+          calculateElapsedDuration(process.state, process.interval.startTime, process.interval.prevSessionsDuration),
+      },
     };
   },
 
@@ -80,7 +81,8 @@ export const processService = {
     const process = manager().getProcess();
 
     if (!process) throw new NoProcessError();
-    if (process.state !== "running") throw new InvalidProcessActionError(process.state, "finish");
+    if (process.state !== "running" && process.state !== "timeout")
+      throw new InvalidProcessActionError(process.state, "finish");
 
     // TODO: Implement appropriate finish logic
     manager().reset();
