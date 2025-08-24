@@ -6,7 +6,7 @@ export class IntervalRepository {
 
   create(interval: IIntervalCreateDto) {
     const stmt = this.db.prepare(
-      "INSERT INTO intervals (start_time, target_duration, prev_sessions_duration) VALUES (?, ?, ?)",
+      "INSERT INTO intervals (startTime, targetDuration, prevSessionsDuration) VALUES (?, ?, ?)",
     );
     const result = stmt.run(new Date().toISOString(), interval.targetDuration, 0);
     return {
