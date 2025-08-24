@@ -53,6 +53,7 @@ pnpm-lock.yaml
 *.tsbuildinfo
 
 # Redis, MongoDB, or SQLite local files
+data/
 dump.rdb
 *.sqlite
 *.db

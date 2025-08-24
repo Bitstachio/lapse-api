@@ -2,8 +2,13 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 
-const dbFile = path.join(__dirname, "lapse.db");
+// point to project root/data/lapse.db
+const dbDir = path.join(process.cwd(), "data");
+const dbFile = path.join(dbDir, "lapse.db");
 const migrationsDir = path.join(__dirname, "migrations");
+
+// ensure the data directory exists
+fs.mkdirSync(dbDir, { recursive: true });
 
 // open or create DB file
 const db = new Database(dbFile);
