@@ -1,7 +1,11 @@
 import { BaseServiceError } from "./base-service-error";
+import { IClient } from "../../types/client";
 
-export class ClientNotFoundError extends BaseServiceError {
-  constructor(id: number) {
-    super(ClientNotFoundError.name, `Client not found for the given ID`, "CLIENT_NOT_FOUND", { id });
+export class ClientNotFoundError<K extends keyof IClient> extends BaseServiceError {
+  constructor(field: K, value: IClient[K]) {
+    super(ClientNotFoundError.name, `Client not found by ${String(field)}=${String(value)}`, "CLIENT_NOT_FOUND", {
+      field,
+      value,
+    });
   }
 }

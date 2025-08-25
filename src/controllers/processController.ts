@@ -5,6 +5,13 @@ import { processService } from "../services/processService";
 import { IApiResponse } from "../types/api";
 import { IProcess, IProcessCreateDto, IProcessIdentifier, IProcessStatusDto } from "../types/process";
 import { internalServerError } from "../utils/api";
+import { ProcessService } from "../services/process-service";
+import { ProcessRepository } from "../repositories/process-repository";
+import db from "../db/connection";
+import { IntervalService } from "../services/interval-service";
+import { IntervalRepository } from "../repositories/interval-repository";
+import { ClientService } from "../services/client-service";
+import { ClientRepository } from "../repositories/client-repository";
 
 export const testProcess = (_: Request, res: Response) => {
   res.status(200).json({ message: "Process test endpoint is working" });
@@ -23,12 +30,17 @@ export const getProcess = (
 };
 
 export const createProcess = (
-  req: Request<{ clientId: string }, {}, IProcessCreateDto>,
+  req: Request<{ clientName: string }, {}, IProcessCreateDto>,
   res: Response<IApiResponse<IProcess>>,
 ) => {
   try {
-    const process = processService.create(req.params.clientId, req.body);
-    res.status(201).json({ success: true, message: "Process created", data: process });
+    const service = new ProcessService(
+      new ProcessRepository(db),
+      new IntervalService(new IntervalRepository(db)),
+      new ClientService(new ClientRepository(db)),
+    );
+    const result = service.create(req.params.clientName, req.body);
+    res.status(201).json({ success: true, message: "Process created", data: result });
   } catch (error) {
     if (error instanceof InvalidProcessActionError) {
       return res.status(400).json({ success: false, message: error.message, error: error.serialize() });

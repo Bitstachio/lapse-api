@@ -5,9 +5,9 @@ import { ClientNotFoundError } from "../errors/process/client-not-found-error";
 export class ClientService {
   constructor(private clientRepository: ClientRepository) {}
 
-  findById(id: number): IClient | undefined {
-    const client = this.clientRepository.findById(id);
+  findByName(name: string) {
+    const client = this.clientRepository.findByName(name);
     if (client) return client;
-    throw new ClientNotFoundError(id);
+    throw new ClientNotFoundError("name", name);
   }
 }

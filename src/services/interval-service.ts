@@ -8,7 +8,6 @@ export class IntervalService {
   create(interval: IIntervalCreateDto) {
     if (interval.targetDuration <= 0)
       throw new InvalidArgumentError("Interval target duration must be larger than zero");
-
-    this.repository.create(interval);
+    return this.repository.create(interval);
   }
 }

@@ -4,9 +4,9 @@ import { IClient, IClientRow } from "../types/client";
 export class ClientRepository {
   constructor(private db: Database) {}
 
-  findById(id: number): IClient | undefined {
-    const command = this.db.prepare<[number], IClientRow>("SELECT * FROM clients WHERE id = ?");
-    const row = command.get(id);
+  findByName(name: string): IClient | undefined {
+    const command = this.db.prepare<[string], IClientRow>("SELECT * FROM clients WHERE name = ?");
+    const row = command.get(name);
     return row ? { ...row, createdAt: new Date(row.createdAt) } : undefined;
   }
 }

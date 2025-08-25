@@ -13,7 +13,7 @@ const router = Router();
 
 router.get("/test", testProcess);
 router.get("/status/:clientId", getProcess);
-router.post("/start/:clientId", createProcess);
+router.post("/start/:clientName", createProcess);
 router.patch("/pause/:clientId", pauseProcess);
 router.patch("/resume/:clientId", resumeProcess);
 router.patch("/extend/:clientId", extendProcess);
