@@ -1,16 +1,18 @@
 import { Database } from "better-sqlite3";
-import { IIntervalCreateDto } from "../types/interval";
+import { IInterval, IIntervalCreateDto } from "../types/interval";
 
 export class IntervalRepository {
   constructor(private db: Database) {}
 
-  create(interval: IIntervalCreateDto) {
+  create(interval: IIntervalCreateDto): IInterval {
     const stmt = this.db.prepare(
       "INSERT INTO intervals (startTime, targetDuration, prevSessionsDuration) VALUES (?, ?, ?)",
     );
-    const result = stmt.run(new Date().toISOString(), interval.targetDuration, 0);
+    const startTime = new Date();
+    const result = stmt.run(startTime.toISOString(), interval.targetDuration, 0);
     return {
       id: Number(result.lastInsertRowid),
+      startTime,
       targetDuration: interval.targetDuration,
       prevSessionsDuration: 0,
     };

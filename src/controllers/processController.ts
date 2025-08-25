@@ -3,7 +3,7 @@ import { InvalidProcessActionError } from "../errors/process/invalid-action-erro
 import { NoProcessError } from "../errors/process/no-process-error";
 import { processService } from "../services/processService";
 import { IApiResponse } from "../types/api";
-import { IProcess, IProcessCreateDto, IProcessIdentifier, IProcessStatusDto } from "../types/process";
+import { IProcess, IProcessCreateDto, IProcessGetDto, IProcessIdentifier, IProcessStatusDto } from "../types/process";
 import { internalServerError } from "../utils/api";
 import { ProcessService } from "../services/process-service";
 import { ProcessRepository } from "../repositories/process-repository";
@@ -31,7 +31,7 @@ export const getProcess = (
 
 export const createProcess = (
   req: Request<{ clientName: string }, {}, IProcessCreateDto>,
-  res: Response<IApiResponse<IProcess>>,
+  res: Response<IApiResponse<IProcessGetDto>>,
 ) => {
   try {
     const service = new ProcessService(

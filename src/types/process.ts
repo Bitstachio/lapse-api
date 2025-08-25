@@ -1,6 +1,6 @@
 // Consider incorporating Pick<> and convert everything to types
 
-import { IInterval, IIntervalStatusDto } from "./interval";
+import { IInterval, IIntervalGetDto, IIntervalStatusDto } from "./interval";
 
 // ===== Models =====
 
@@ -9,11 +9,13 @@ export type TProcessState = "running" | "paused" | "timeout";
 export type TProcessAction = "start" | "finish" | "pause" | "resume" | "timeout" | "extend";
 
 export interface IProcess {
+  id: number,
   component: string;
   quantity: number;
   state: TProcessState;
   createdAt: Date;
-  interval: IInterval;
+  intervalId: number;
+  clientId: number;
 }
 
 export interface IInvalidProcessActionDetails {
@@ -22,6 +24,14 @@ export interface IInvalidProcessActionDetails {
 }
 
 // ===== DTOs =====
+
+export interface IProcessGetDto {
+  component: string;
+  quantity: number;
+  state: TProcessState;
+  createdAt: Date;
+  interval: IIntervalGetDto;
+}
 
 export interface IProcessCreateDto {
   component: string;

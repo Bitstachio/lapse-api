@@ -1,7 +1,8 @@
 import { ProcessRepository } from "../repositories/process-repository";
-import { IProcessCreateDto } from "../types/process";
+import { IProcessCreateDto, IProcessGetDto } from "../types/process";
 import { ClientService } from "./client-service";
 import { IntervalService } from "./interval-service";
+import { toProcessGetDto } from "../mappers/process";
 
 export class ProcessService {
   constructor(
@@ -10,10 +11,11 @@ export class ProcessService {
     private clientService: ClientService,
   ) {}
 
-  create(clientName: string, process: IProcessCreateDto) {
-    const clientId = this.clientService.findByName(clientName).id;
+  create(clientName: string, process: IProcessCreateDto): IProcessGetDto {
+    const client = this.clientService.findByName(clientName);
     // TODO: Set target duration dynamically
-    const intervalId = this.intervalService.create({ targetDuration: 10_000 }).id;
-    return this.repository.create(process, intervalId, clientId);
+    const createdInterval = this.intervalService.create({ targetDuration: 10_000 });
+    const createdProcess = this.repository.create(process, createdInterval.id, client.id);
+    return toProcessGetDto(createdProcess, createdInterval);
   }
 }

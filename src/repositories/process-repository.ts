@@ -1,10 +1,10 @@
 import { Database } from "better-sqlite3";
-import { IProcessCreateDto } from "../types/process";
+import { IProcess, IProcessCreateDto } from "../types/process";
 
 export class ProcessRepository {
   constructor(private db: Database) {}
 
-  create(process: IProcessCreateDto, intervalId: number, clientId: number) {
+  create(process: IProcessCreateDto, intervalId: number, clientId: number): IProcess {
     const command = this.db.prepare(`
         INSERT INTO processes (component, quantity, state, createdAt, intervalId, clientId)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -22,7 +22,7 @@ export class ProcessRepository {
       component: process.component,
       quantity: process.quantity,
       state: "running",
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(),
       intervalId,
       clientId,
     };
