@@ -1,8 +1,15 @@
 import { Database } from "better-sqlite3";
-import { IProcess, IProcessCreateDto, IProcessRow } from "../types/process";
+import { IProcess, IProcessCreateDto, IProcessGetDto, IProcessRow } from "../types/process";
 
 export class ProcessRepository {
   constructor(private db: Database) {}
+
+  findById = (id: number): IProcess | undefined => {
+    const row = this.db.prepare<[number], IProcessRow>(`
+      SELECT * FROM processes WHERE id = ?
+    `).get(id);
+    return row ? { ...row, createdAt: new Date(row.createdAt) } : undefined;
+  }
 
   findByClientId(clientId: number): IProcess | undefined {
     const row = this.db.prepare<[number], IProcessRow>(`
@@ -33,6 +40,22 @@ export class ProcessRepository {
       intervalId,
       clientId,
     };
+  }
+
+  update = (id: number, changes: Partial<IProcess>): IProcess | undefined => {
+    const keys = Object.keys(changes) as (keyof IProcessRow)[];
+    if (keys.length === 0) return this.findById(id);
+
+    // Build SET clause dynamically: "field1 = ?, field2 = ?"
+    const setClause = keys.map((key) => `${key} = ?`).join(", ");
+    const values = keys.map((key) => (changes)[key]);
+
+    const result = this.db.prepare(`
+      UPDATE processes SET ${setClause} WHERE id = ?
+    `).run(...values, id);
+
+    if (result.changes === 0) return undefined;
+    return this.findById(id);
   }
 
   pause(clientId: string) {}

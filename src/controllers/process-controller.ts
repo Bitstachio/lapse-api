@@ -55,6 +55,24 @@ export class ProcessController {
       return internalServerError(res);
     }
   }
+
+  pause = (
+    req: Request<IClientIdentifier, {}, {}>,
+    res: Response<IApiResponse>,
+  ) => {
+    try {
+      this.processService.pause(req.params.clientName);
+
+
+      // processService.pause(req.params.clientId);
+      // return res.status(200).json({ success: true, message: "Process paused" });
+    } catch (error) {
+      if (error instanceof NoProcessError || error instanceof InvalidProcessActionError) {
+        return res.status(400).json({ success: false, message: error.message, error: error.serialize() });
+      }
+      return internalServerError(res);
+    }
+  }
 }
 
 export const testProcess = (_: Request, res: Response) => {
