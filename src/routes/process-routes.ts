@@ -7,7 +7,7 @@ import {
   resumeProcess,
   testProcess,
   finishProcess,
-} from "../controllers/processController";
+} from "../controllers/process-controller";
 
 const router = Router();
 

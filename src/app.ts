@@ -1,5 +1,5 @@
 import express from "express";
-import processRoutes from "./routes/processRoutes";
+import processRoutes from "./routes/process-routes";
 import cors from "cors";
 
 const baseUrl = "/api/v1";
