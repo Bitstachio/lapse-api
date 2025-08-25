@@ -13,6 +13,34 @@ import { IntervalRepository } from "../repositories/interval-repository";
 import { ClientService } from "../services/client-service";
 import { ClientRepository } from "../repositories/client-repository";
 
+export class ProcessController {
+  constructor(
+    private readonly processService: ProcessService,
+    private readonly intervalService: IntervalService,
+    private readonly clientService: ClientService,
+  ) {}
+
+  create(
+    req: Request<{ clientName: string }, {}, IProcessCreateDto>,
+    res: Response<IApiResponse<IProcessGetDto>>,
+  ) {
+    try {
+      const service = new ProcessService(
+        new ProcessRepository(db),
+        new IntervalService(new IntervalRepository(db)),
+        new ClientService(new ClientRepository(db)),
+      );
+      const result = service.create(req.params.clientName, req.body);
+      res.status(201).json({ success: true, message: "Process created", data: result });
+    } catch (error) {
+      if (error instanceof InvalidProcessActionError) {
+        return res.status(400).json({ success: false, message: error.message, error: error.serialize() });
+      }
+      return internalServerError(res);
+    }
+  }
+}
+
 export const testProcess = (_: Request, res: Response) => {
   res.status(200).json({ message: "Process test endpoint is working" });
 };
@@ -25,26 +53,6 @@ export const getProcess = (
     const status = processService.getStatus(req.params.clientId);
     res.status(200).json({ success: true, ...(!status && { message: "No active process" }), data: status });
   } catch (error) {
-    return internalServerError(res);
-  }
-};
-
-export const createProcess = (
-  req: Request<{ clientName: string }, {}, IProcessCreateDto>,
-  res: Response<IApiResponse<IProcessGetDto>>,
-) => {
-  try {
-    const service = new ProcessService(
-      new ProcessRepository(db),
-      new IntervalService(new IntervalRepository(db)),
-      new ClientService(new ClientRepository(db)),
-    );
-    const result = service.create(req.params.clientName, req.body);
-    res.status(201).json({ success: true, message: "Process created", data: result });
-  } catch (error) {
-    if (error instanceof InvalidProcessActionError) {
-      return res.status(400).json({ success: false, message: error.message, error: error.serialize() });
-    }
     return internalServerError(res);
   }
 };
