@@ -18,6 +18,16 @@ export interface IProcess {
   clientId: number;
 }
 
+export interface IProcessRow {
+  id: number,
+  component: string;
+  quantity: number;
+  state: TProcessState;
+  createdAt: string;
+  intervalId: number;
+  clientId: number;
+}
+
 export interface IInvalidProcessActionDetails {
   state: TProcessState;
   action: TProcessAction;

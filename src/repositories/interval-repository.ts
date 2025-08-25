@@ -1,8 +1,15 @@
 import { Database } from "better-sqlite3";
-import { IInterval, IIntervalCreateDto } from "../types/interval";
+import { IInterval, IIntervalCreateDto, IIntervalRow } from "../types/interval";
 
 export class IntervalRepository {
   constructor(private db: Database) {}
+
+  findById(id: number): IInterval | undefined {
+    const row  = this.db.prepare<[number], IIntervalRow>(`
+      SELECT * FROM intervals WHERE id = ?
+    `).get(id);
+    return row ? { ...row, startTime: new Date(row.startTime) } : undefined;
+  }
 
   create(interval: IIntervalCreateDto): IInterval {
     const stmt = this.db.prepare(

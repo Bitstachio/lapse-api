@@ -29,7 +29,7 @@ const processService = new ProcessService(processRepository, intervalService, cl
 const processController = new ProcessController(processService, intervalService, clientService);
 
 router.get("/test", testProcess);
-router.get("/status/:clientId", getProcess);
+router.get("/status/:clientName", processController.get);
 router.post("/start/:clientName", processController.create);
 router.patch("/pause/:clientId", pauseProcess);
 router.patch("/resume/:clientId", resumeProcess);

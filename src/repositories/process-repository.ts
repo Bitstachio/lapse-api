@@ -1,8 +1,15 @@
 import { Database } from "better-sqlite3";
-import { IProcess, IProcessCreateDto } from "../types/process";
+import { IProcess, IProcessCreateDto, IProcessRow } from "../types/process";
 
 export class ProcessRepository {
   constructor(private db: Database) {}
+
+  findByClientId(clientId: number): IProcess | undefined {
+    const row = this.db.prepare<[number], IProcessRow>(`
+      SELECT * FROM processes WHERE clientId = ?
+    `).get(clientId);
+    return row ? { ...row, createdAt: new Date(row.createdAt) } : undefined;
+  }
 
   create(process: IProcessCreateDto, intervalId: number, clientId: number): IProcess {
     const command = this.db.prepare(`

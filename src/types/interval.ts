@@ -7,6 +7,13 @@ export interface IInterval {
   prevSessionsDuration: number;
 }
 
+export interface IIntervalRow {
+  id: number;
+  startTime: string;
+  targetDuration: number;
+  prevSessionsDuration: number;
+}
+
 // ===== DTOs =====
 
 export interface IIntervalGetDto {

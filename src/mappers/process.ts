@@ -1,7 +1,7 @@
 import { IProcess, IProcessGetDto } from "../types/process";
-import { IInterval } from "../types/interval";
+import { IIntervalGetDto } from "../types/interval";
 
-export const toProcessGetDto = (process: IProcess, interval: IInterval): IProcessGetDto => ({
+export const toProcessGetDto = (process: IProcess, interval: IIntervalGetDto): IProcessGetDto => ({
   component: process.component,
   quantity: process.quantity,
   state: process.state,

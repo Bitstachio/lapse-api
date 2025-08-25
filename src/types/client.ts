@@ -1,3 +1,5 @@
+// ===== Models =====
+
 export interface IClient {
   id: number;
   name: string;
@@ -8,4 +10,10 @@ export interface IClientRow {
   id: number;
   name: string;
   createdAt: string;
+}
+
+// ===== DTOs =====
+
+export interface IClientIdentifier {
+  clientName: string;
 }

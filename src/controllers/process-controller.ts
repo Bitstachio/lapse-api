@@ -12,6 +12,7 @@ import { IntervalService } from "../services/interval-service";
 import { IntervalRepository } from "../repositories/interval-repository";
 import { ClientService } from "../services/client-service";
 import { ClientRepository } from "../repositories/client-repository";
+import { IClientIdentifier } from "../types/client";
 
 export class ProcessController {
   constructor(
@@ -20,8 +21,23 @@ export class ProcessController {
     private readonly clientService: ClientService,
   ) {}
 
+  get = (
+    req: Request<IClientIdentifier, {}, IProcessIdentifier>,
+    res: Response<IApiResponse<IProcessGetDto | null>>,
+  ) => {
+    try {
+      const status = this.processService.getByClientName(req.params.clientName);
+      return res.status(200).json({ success: true, data: status });
+    } catch (error) {
+      if (error instanceof NoProcessError) {
+        return res.status(200).json({ success: true, message: "No active process", data: null });
+      }
+      return internalServerError(res);
+    }
+  }
+
   create(
-    req: Request<{ clientName: string }, {}, IProcessCreateDto>,
+    req: Request<IClientIdentifier, {}, IProcessCreateDto>,
     res: Response<IApiResponse<IProcessGetDto>>,
   ) {
     try {
