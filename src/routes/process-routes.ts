@@ -1,8 +1,7 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import {
   extendProcess,
   finishProcess,
-  getProcess,
   pauseProcess,
   ProcessController,
   resumeProcess,
@@ -15,8 +14,14 @@ import { IntervalRepository } from "../repositories/interval-repository";
 import { ClientService } from "../services/client-service";
 import { IntervalService } from "../services/interval-service";
 import { ProcessService } from "../services/process-service";
+import { swaggerSpec } from "../configs/swagger";
 
 const router = Router();
+
+router.get("/swagger.json", (_: Request, res: Response) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
 
 const clientRepository = new ClientRepository(db);
 const intervalRepository = new IntervalRepository(db);

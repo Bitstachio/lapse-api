@@ -75,6 +75,24 @@ export class ProcessController {
   }
 }
 
+/**
+ * @openapi
+ * /process/test:
+ *   get:
+ *     summary: Test the process endpoint
+ *     description: Returns a simple test message.
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Process test endpoint is working
+ */
 export const testProcess = (_: Request, res: Response) => {
   res.status(200).json({ message: "Process test endpoint is working" });
 };
