@@ -26,12 +26,9 @@ export class ProcessController {
     res: Response<IApiResponse<IProcessGetDto | null>>,
   ) => {
     try {
-      const status = this.processService.getByClientName(req.params.clientName);
-      return res.status(200).json({ success: true, data: status });
+      const process = this.processService.getByClientName(req.params.clientName);
+      return res.status(200).json({ success: true, data: process });
     } catch (error) {
-      if (error instanceof NoProcessError) {
-        return res.status(200).json({ success: true, message: "No active process", data: null });
-      }
       return internalServerError(res);
     }
   }

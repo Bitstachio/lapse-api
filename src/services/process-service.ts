@@ -12,12 +12,15 @@ export class ProcessService {
     private clientService: ClientService,
   ) {}
 
-  getByClientName(clientName: string): IProcessGetDto {
+  getByClientName = (clientName: string): IProcessGetDto | null => {
     const client = this.clientService.findByName(clientName);
     const process = this.repository.findByClientId(client.id);
-    if (!process) throw new NoProcessError(); // TODO: Make the error class more descriptive
-    const interval = this.intervalService.getById(process.intervalId);
-    return toProcessGetDto(process, interval);
+
+    if (process) {
+      const interval = this.intervalService.getById(process.intervalId);
+      return toProcessGetDto(process, interval);
+    }
+    return null;
   }
 
   create(clientName: string, process: IProcessCreateDto): IProcessGetDto {
@@ -36,9 +39,9 @@ export class ProcessService {
     if (!updated) throw new Error(); // TODO: Replace with appropriate error
     const interval = this.intervalService.getById(process.intervalId);
     return toProcessGetDto(process, interval);
-  }
+  };
 
   pause = (clientName: string) => {
     this.update(clientName, { state: "paused" });
-  }
+  };
 }
