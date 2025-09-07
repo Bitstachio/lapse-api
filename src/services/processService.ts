@@ -1,5 +1,5 @@
 import { InvalidProcessActionError } from "../errors/process/invalid-action-error";
-import { NoProcessError } from "../errors/process/no-process-error";
+import { ProcessNotFoundError } from "../errors/process/process-not-found-error";
 import ProcessManager from "../ProcessManager";
 import { IProcessCreateDto, TProcessState } from "../types/process";
 
@@ -44,7 +44,7 @@ export const processService = {
   pause: (clientId: string) => {
     const process = manager().getProcess();
 
-    if (!process) throw new NoProcessError();
+    if (!process) throw new ProcessNotFoundError();
     if (process.state !== "running") throw new InvalidProcessActionError(process.state, "pause");
 
     manager().pause();
@@ -53,7 +53,7 @@ export const processService = {
   resume: (clientId: string) => {
     const process = manager().getProcess();
 
-    if (!process) throw new NoProcessError();
+    if (!process) throw new ProcessNotFoundError();
     if (process.state !== "paused") throw new InvalidProcessActionError(process.state, "resume");
 
     manager().resume();
@@ -62,7 +62,7 @@ export const processService = {
   timeout: (clientId: string) => {
     const process = manager().getProcess();
 
-    if (!process) throw new NoProcessError();
+    if (!process) throw new ProcessNotFoundError();
     if (process.state !== "running") throw new InvalidProcessActionError(process.state, "timeout");
 
     manager().timeout();
@@ -71,7 +71,7 @@ export const processService = {
   extend: (clientId: string) => {
     const process = manager().getProcess();
 
-    if (!process) throw new NoProcessError();
+    if (!process) throw new ProcessNotFoundError();
     if (process.state !== "timeout") throw new InvalidProcessActionError(process.state, "extend");
 
     manager().extend();
@@ -80,7 +80,7 @@ export const processService = {
   finish: (clientId: string) => {
     const process = manager().getProcess();
 
-    if (!process) throw new NoProcessError();
+    if (!process) throw new ProcessNotFoundError();
     if (process.state !== "running" && process.state !== "timeout")
       throw new InvalidProcessActionError(process.state, "finish");
 

@@ -3,7 +3,7 @@ import { IProcess, IProcessCreateDto, IProcessGetDto } from "../types/process";
 import { ClientService } from "./client-service";
 import { IntervalService } from "./interval-service";
 import { toProcessGetDto } from "../mappers/process";
-import { NoProcessError } from "../errors/process/no-process-error";
+import { ProcessNotFoundError } from "../errors/process/process-not-found-error";
 
 export class ProcessService {
   constructor(
@@ -34,7 +34,7 @@ export class ProcessService {
   update = (clientName: string, changes: Partial<IProcess>): IProcessGetDto => {
     const client = this.clientService.findByName(clientName);
     const process = this.repository.findByClientId(client.id);
-    if (!process) throw new NoProcessError();
+    if (!process) throw new ProcessNotFoundError("name", clientName);
     const updated = this.repository.update(process.id, changes);
     if (!updated) throw new Error(); // TODO: Replace with appropriate error
     const interval = this.intervalService.getById(process.intervalId);
