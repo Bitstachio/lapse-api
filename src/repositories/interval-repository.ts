@@ -4,11 +4,17 @@ import { IInterval, IIntervalCreateDto, IIntervalRow } from "../types/interval";
 export class IntervalRepository {
   constructor(private db: Database) {}
 
-  findById(id: number): IInterval | undefined {
-    const row  = this.db.prepare<[number], IIntervalRow>(`
-      SELECT * FROM intervals WHERE id = ?
-    `).get(id);
-    return row ? { ...row, startTime: new Date(row.startTime) } : undefined;
+  findById(id: number): IInterval | null {
+    const row = this.db
+      .prepare<[number], IIntervalRow>(
+        `
+          SELECT *
+          FROM intervals
+          WHERE id = ?
+        `,
+      )
+      .get(id);
+    return row ? { ...row, startTime: new Date(row.startTime) } : null;
   }
 
   create(interval: IIntervalCreateDto): IInterval {
