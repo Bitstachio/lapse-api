@@ -14,6 +14,11 @@ export interface IClientRow {
 
 // ===== DTOs =====
 
+export interface IClientGetDto {
+  name: string;
+  createdAt: Date;
+}
+
 export interface IClientIdentifier {
   clientName: string;
 }
