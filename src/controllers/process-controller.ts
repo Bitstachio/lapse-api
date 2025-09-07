@@ -25,12 +25,8 @@ export class ProcessController {
     req: Request<IClientIdentifier, {}, IProcessIdentifier>,
     res: Response<IApiResponse<IProcessGetDto | null>>,
   ) => {
-    try {
-      const process = this.processService.getByClientName(req.params.clientName);
-      return res.status(200).json({ success: true, data: process });
-    } catch (error) {
-      return internalServerError(res);
-    }
+    const process = this.processService.getByClientName(req.params.clientName);
+    return res.status(200).json({ success: true, data: process });
   }
 
   create(
