@@ -11,7 +11,7 @@ export class ProcessController {
     req: Request<IClientIdentifier, {}, IProcessIdentifier>,
     res: Response<IApiResponse<IProcessGetDto | null>>,
   ) => {
-    const process = this.processService.getByClientName(req.params.clientName);
+    const process = this.processService.findByClientName(req.params.clientName);
     return res.status(200).json({ success: true, data: process });
   };
 
