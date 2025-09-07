@@ -1,12 +1,5 @@
 import { Router } from "express";
-import {
-  extendProcess,
-  finishProcess,
-  pauseProcess,
-  ProcessController,
-  resumeProcess,
-  testProcess,
-} from "../controllers/process-controller";
+import { ProcessController } from "../controllers/process-controller";
 import { ProcessRepository } from "../repositories/process-repository";
 import db from "../db/connection";
 import { ClientRepository } from "../repositories/client-repository";
@@ -25,14 +18,13 @@ const clientService = new ClientService(clientRepository);
 const intervalService = new IntervalService(intervalRepository);
 const processService = new ProcessService(processRepository, intervalService, clientService);
 
-const processController = new ProcessController(processService, intervalService, clientService);
+const processController = new ProcessController(processService);
 
-router.get("/test", testProcess);
 router.get("/status/:clientName", processController.get);
 router.post("/start/:clientName", processController.create);
-router.patch("/pause/:clientId", pauseProcess);
-router.patch("/resume/:clientId", resumeProcess);
-router.patch("/extend/:clientId", extendProcess);
-router.patch("/finish/:clientId", finishProcess);
+// router.patch("/pause/:clientId", processController.pause);
+// router.patch("/resume/:clientId", processController.resume);
+// router.patch("/extend/:clientId", processController.extend);
+// router.patch("/finish/:clientId", processController.finish);
 
 export default router;
